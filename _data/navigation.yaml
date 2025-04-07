@@ -73,7 +73,7 @@ labs:
 local:
 - title: introduction local
   children:
-  - title: How to enjoy your first Onboarding tracker backlog
+  - title: "Intro to Local Onboarding"
     url: "/local/introduction_local/how_to_enjoy_your_first_onboarding_tracker_backlog"
 - title: deploy local
   children:
