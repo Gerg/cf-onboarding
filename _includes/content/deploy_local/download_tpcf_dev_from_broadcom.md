@@ -1,25 +1,39 @@
 
 ### What?
-[TPCF Dev](https://tanzu.vmware.com/application-service) is a lightweight [Cloud Foundry](https://docs.cloudfoundry.org/concepts/overview.html) installation that runs on a single virtual machine on your workstation.
+[Shepherd](https://github.gwd.broadcom.net/TNZ/shepherd) is a tool for accessing on-demand development environments, including [Open-Source Cloud Foundry](https://docs.cloudfoundry.org/concepts/overview.html) and proprietary [Tanzu Cloud Foundry](https://www.vmware.com/products/app-platform/tanzu) environments.
 
-With TPCF Dev, you can get the Cloud Foundry developer experience (pushing, scaling, binding, makes it harder, better, faster, stronger) without going through the operator experience... which is admittedly an acquired taste.
-
-It's open source, but from [Tanzu Platform Cloud Foundry (TPCF)](https://tanzu.vmware.com/tanzu) not the [Cloud Foundry Foundation (CFF)](https://www.cloudfoundry.org/foundation/), and the cf CLI plugin that makes it any fun to use is only available through [Pivotal Network](https://network.pivotal.io/).
+With Shepherd environments, you can get the Cloud Foundry developer experience (pushing apps, scaling, binding services, etc.) without first needing to learn how to deploy Cloud Foundry.
 
 ### How?
-**[Download PCF Dev from Pivotal Network](https://network.pivotal.io/products/pcfdev)** (you'll need a [Pivotal Network Account](https://network.pivotal.io/registrations/new) if you don't have one already).
 
-The content of this zip file is not PCF Dev itself, but a script that installs the PCF Dev plugin for the cf CLI. It will only download the PCF Dev image from [S3](https://aws.amazon.com/s3/) when you run `cf dev start` in a later story.
+First, [install the shepherd CLI](https://github.gwd.broadcom.net/TNZ/shepherd2/blob/main/USERGUIDE.md#quick-start).
 
-**Note:** Later instructions are written for Linux, but you should choose the files specific to your operating system (hint: Darwin means Mac). Also, make sure to follow the **Usage Instructions** carefully (you should end up with one file, not two).
+Next, log in to access the Shepherd pools:
+
+```sh
+$ shepherd config location https://v2-shepherd.lvn.broadcom.net
+$ shepherd login user
+```
+
+Next, use the Shepherd CLI to claim a TPCF (also known as TAS) environment:
+
+```sh
+$ shepherd create lease --pool="tas-10_0-lite" --duration 24h
+```
+
+Claiming the environment will likely take some time, since most Shepherd environments are provisioned on-demand to limit costs. Feel free to read ahead while waiting for your environment to be available.
+
+**Note:** The claimed environment will expire after 24 hours. You can extend your lease at any time by running:
+```sh
+$ shepherd update lease <lease-id> --extend-by <extension-time>
+```
 
 ### Expected Result
-You have a zip file and a new found sense of accomplishment.
+You have a claimed CF environment in Shepherd.
 
 ### Resources
-[Pivotal.io: What is PCF Dev?](https://pivotal.io/pcf-dev)
-[Doc: What is a virtual machine?](https://azure.microsoft.com/en-us/overview/what-is-a-virtual-machine/) (only incidentally by Microsoft Azure, make nothing of it)
+- [Tanzu Platform](https://www.vmware.com/products/app-platform/tanzu)
 
-### Relevant Repos and Teams
-**PCF Dev:** [pivotal-cf/pcfdev](https://github.com/cloudfoundry-attic/cfdev)
-**PCF Dev CLI plugin:** [pivotal-cf/pcfdev-cli](https://github.com/pivotal-cf/pcfdev-cli)
+### Relevant Repos
+- **Shepherd:** [TNZ/shepherd2](https://github.gwd.broadcom.net/TNZ/shepherd2)
+- **TAS:** [TNZ/tas](https://github.gwd.broadcom.net/TNZ/tas)

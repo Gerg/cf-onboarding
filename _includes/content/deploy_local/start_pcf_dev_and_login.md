@@ -1,34 +1,41 @@
 
 ### What?
-You've already downloaded PCF Dev from Pivotal Network. Now you're going to run it!
+You've claimed a CF environment from Shepherd and downloaded the CF CLI. Now you're going to connect to the environment with the CLI.
 
 ### How?
-Unzip the file you downloaded in the first story (e.g. `unzip pcfdev-VERSION-linux.zip`)
 
-Run the executable binary file inside (e.g. `./pcfdev-VERSION-linux`)
+When claiming the environment from Shepherd, it displayed the ID of the lease. For example:
+```sh
+$ shepherd create lease ...
+...
+Lease ID: <lease-id>
+```
 
-From the command line, run `cf dev start`. Because you are running it for the first time it will download the image and import it to VirtualBox before starting the VM. In the future, the same command will start PCF Dev without downloading or importing it again.
+You can use this lease id to get information about the environment, including user credentials. Use [`jq`](https://jqlang.org/) to retrieve the CF API address and admin password:
+```sh
+$ shepherd get lease <lease-id> --json | jq .output.cf.api_url
+"<api-url>"
 
-**Note:** You may need to run `cf install-plugin cfdev` to ensure that you have the `cf dev` command.
+$ shepherd get lease <lease-id> --json | jq .output.cf.password
+"<admin-password>"
+```
 
-FYI ...this process takes awhile. How long of a while will be influenced by your internet connectivity and bandwidth. Go get a snack or read some of the links.
+Configure the CF CLI to target the Shepherd environment's API endpoint:
+```sh
+$ cf api <api-url> --skip-ssl-validation
+```
 
-When it wraps up, PCF Dev will have printed the command that you should use to login, followed by credentials for two users, `user` and `admin`.
-Run the login command, choose the `admin` user, then select the `cfdev-org` org.
-(The users have different permissions. We will need the `admin` permissions.)
+Authenticate as the admin user:
+```sh
+$ cf auth admin <admin-password>
+```
 
 ### Expected Result
-Run `cf target`. You'll see a line that says `API endpoint:   https://api.v3.pcfdev.io`, followed by your user, org, and space info.
-
-### Troubleshooting
-
-If there appears to be no progress for 20-30 minutes, double-check if your system has any disk space left. PCF Dev apparently does not handle this case well.
+Run `cf target`. You'll see a line that says `API endpoint:   https://<api-url>`, followed by your user.
 
 ### Resources
-[Tutorial: Getting Started with PCF Dev](https://tanzu.vmware.com/developer/)
-[Blog post: Meet Pivotal Cloud Foundry Dev, your Ticket To Running Cloud Foundry Locally](https://tanzu.vmware.com/content/blog/meet-pcf-dev-your-ticket-to-running-cloud-foundry-locally)
-[Blog post: A little diddy about binary file formats](https://betterexplained.com/articles/a-little-diddy-about-binary-file-formats/)
+- [Getting started with the cf CLI](https://docs.cloudfoundry.org/cf-cli/getting-started.html)
 
-### Relevant Repos and Teams
-**PCF Dev:** [pivotal-cf/pcfdev](https://github.com/cloudfoundry-attic/cfdev),
-**Also PCF Dev:** [pivotal-cf/pcfdev-cli](https://github.com/pivotal-cf/pcfdev-cli)
+### Relevant Repos
+- **CLI:** [cloudfoundry/cli](https://github.com/cloudfoundry/cli)
+- **Shepherd:** [TNZ/shepherd2](https://github.gwd.broadcom.net/TNZ/shepherd2)

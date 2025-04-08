@@ -77,13 +77,11 @@ local:
     url: "/local/introduction_local/how_to_enjoy_your_first_onboarding_tracker_backlog"
 - title: deploy local
   children:
-  - title: Download TPCF Dev from Broadcom
+  - title: Claim a Shepherd Environment
     url: "/local/deploy_local/download_tpcf_dev_from_broadcom"
   - title: Install the Cloud Foundry CLI
     url: "/local/deploy_local/install_the_cloud_foundry_cli"
-  - title: Install VirtualBox
-    url: "/local/deploy_local/install_virtualbox"
-  - title: Start PCF Dev and login
+  - title: Log In to Cloud Foundry
     url: "/local/deploy_local/start_pcf_dev_and_login"
 - title: app development local
   children:
